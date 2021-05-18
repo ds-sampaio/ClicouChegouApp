@@ -49,10 +49,18 @@ async function savedUser(listUser, id){
 }
 
 
-module.exports = {
+// module.exports = {
+//     saveUser,
+//     getUsers,
+//     getUser,
+//     deleteUser
+
+// }
+
+
+export {
     saveUser,
     getUsers,
     getUser,
     deleteUser
-
-}
+  }
