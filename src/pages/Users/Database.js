@@ -50,7 +50,7 @@ async function savedUser(listUser, id){
 
 
 module.exports = {
-    saveUser,
+    savedUser,
     getUsers,
     getUser,
     deleteUser
