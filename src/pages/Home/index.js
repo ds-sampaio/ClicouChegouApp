@@ -2,25 +2,40 @@ import React from 'react';
 import {ScrollView ,View, Text, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements'
+import {Header,Left,Right} from 'native-base'
 
 import Produtos from '../../component/Produtos'
 
-export default function Home() {
+
+export default function Home(props) {
    const navigation = useNavigation();
 
-    return (  <View style={styles.container}>
-        <View style={styles.header}>          
-          <View style={styles.titulo}> 
+    return (  
+    <View style={styles.container}>          
+        <View style={styles.header}> 
+        <Header style={{ backgroundColor:'#8b008b'}} >
+          <Left>               
+            <Icon 
+            name='menu'
+            color='#FFF'
+            size={35} 
+            onPress={() =>
+              props.navigation.openDrawer()} />  
+          </Left>   
+          <Text style={styles.tituloapp}>Clicou Checgou</Text>           
+          </Header>           
+          {/* <View style={styles.titulo}> 
             <Text style={styles.texttitulo}>
                 Clicou Chegou
-            </Text>
-          </View> 
+            </Text>            
+          </View>  */}
+          
           {/* <Image
            source={require('../../assets/clicouchegou.jpg')}
            style={styles.image}
           /> */}
  
-          <View style={styles.textContainer}>
+          <View style={styles.textContainer}>            
              <Text style={styles.text}>Produtos</Text> 
              <View style={styles.carrinho}>
               <Icon 
@@ -104,10 +119,10 @@ const styles = StyleSheet.create({
     },
     carrinho:{
       flexDirection: 'row',
-      left : 230,   
+      left : '55%',   
       top: 3,      
     },
-    titulo:{      
+    titulo:{  
        marginTop: '0%',  
        width: '110%', 
       height: 110,
@@ -116,10 +131,19 @@ const styles = StyleSheet.create({
     texttitulo:{
       fontFamily: 'Anton_400Regular',
       fontSize: 26,     
-      color : '#FFF',
+      color : '#fff',
       flexDirection: 'row',
       marginVertical: '13%',
       marginHorizontal: '30%',
       marginBottom: 13,           
+    },
+    tituloapp:{
+      fontFamily: 'Anton_400Regular',
+      fontSize: 26,     
+      color : '#fff',
+      textAlign: 'center', 
+      marginHorizontal: '25%',
+      marginEnd: '5%',
+      marginTop: '3%'        
     },
   });

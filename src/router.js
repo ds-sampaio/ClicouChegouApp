@@ -12,6 +12,7 @@ import Detail from './pages/Detail';
 import Configuracoes from './pages/Configuracoes';
 import AppList from './pages/Users/AppList';
 import AppForm from './pages/Users/AppForm';
+import AppFormInicial from './pages/Users/AppFormInicial';
 
 
 
@@ -68,7 +69,12 @@ function Routes(props){
                         title: "Detail"
                     }}
                 />
-                <Drawer.Screen name="Configuracoes" component={Configuracoes} />                                               
+                <Drawer.Screen name="Configuracoes" component={Configuracoes} /> 
+                <Drawer.Screen name="AppFormInicial" component={AppFormInicial} 
+                    options= {{
+                        title: "Usuario Login"
+                    }}
+                />                                              
             </Drawer.Navigator>           
             {/* <Stack.Navigator>
                 <Stack.Screen

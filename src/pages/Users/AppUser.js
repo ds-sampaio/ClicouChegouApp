@@ -3,7 +3,6 @@ import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import Database from './Database';
 import { Icon , Button} from 'react-native-elements'
 
-
 export default function AppUser(props){
     function handleDeletePress(){ 
         Alert.alert(
@@ -37,7 +36,7 @@ export default function AppUser(props){
                 <TouchableOpacity style={styles.deleteButton} 
                     onPress={handleDeletePress}> 
                     <Icon name="delete" color="white" size={18} />
-                </TouchableOpacity>              
+                </TouchableOpacity>                   
                 <TouchableOpacity 
                     style={styles.editButton} 
                     onPress={handleEditPress}> 

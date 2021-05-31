@@ -21,6 +21,7 @@ function getUsers(){
             })
 }
 
+
 async function getUser(id){
     const savedUsers = await getUsers();
     return savedUsers.find(user => user.id === id);
@@ -48,17 +49,17 @@ async function savedUser(listUser, id){
     return AsyncStorage.setItem('users', JSON.stringify(savedUsers));
 }
 
+  export  {
+      saveUser,
+      getUsers,
+      getUser,
+      deleteUser
+ }
 
-// module.exports = {
-//     savedUser,
-//     getUsers,
-//     getUser,
-//     deleteUser
-//   }
 
-  exports = {
-    savedUser,
-    getUsers,
-    getUser,
-    deleteUser
-  }
+//  module.exports = {
+//      saveUser,
+//      getUsers,
+//      getUser,
+//      deleteUser
+//  }

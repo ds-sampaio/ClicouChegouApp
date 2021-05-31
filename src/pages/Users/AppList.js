@@ -5,6 +5,7 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import AppUser from './AppUser';
 import Database from './Database';
 
+
 export default function AppList({ route, navigation }) {
     const [users, setUsers] = useState([]);
   
@@ -13,7 +14,7 @@ export default function AppList({ route, navigation }) {
    }, [route]);
 
     return (
-        <View style={styles.container}>           
+        <View style={styles.container}>                                  
             <StatusBar style="light" />
             {/* <Text style={styles.title}>Usuarios</Text> */}
             <ScrollView 
