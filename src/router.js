@@ -57,13 +57,13 @@ function Routes(props){
                         title: "Página Inicial"
                     }}
                 /> 
-                <Drawer.Screen 
+                {/* <Drawer.Screen 
                 name="FormUsers" 
                 component={FormUsers} 
                 options= {{
                     title: "Usuários"
                 }}
-                /> 
+                />  */}
                  <Drawer.Screen name="Detail" component={Detail} 
                     options= {{
                         title: "Detail"

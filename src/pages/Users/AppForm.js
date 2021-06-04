@@ -99,7 +99,7 @@ export default function AppForm({ route, navigation }) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#8b008b',
+      backgroundColor: '#663399',
       alignItems: 'center',
     },
     title: {
@@ -126,14 +126,14 @@ export default function AppForm({ route, navigation }) {
       paddingHorizontal: 24,
       fontSize: 16,
       alignItems: 'stretch',
-      borderColor: '#8b008b',
+      borderColor: '#663399',
       borderWidth: 1,
     },
     button: {
       marginTop: 20,
       height: 60,
-      backgroundColor: '#8b008b',
-      borderBottomColor: '#8b008b',
+      backgroundColor: '#663399',
+      borderBottomColor: '#663399',
       borderRadius: 10,
       paddingHorizontal: 24,
       fontSize: 16,

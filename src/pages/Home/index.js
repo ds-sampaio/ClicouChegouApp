@@ -1,8 +1,9 @@
 import React from 'react';
-import {ScrollView ,View, Text, StyleSheet, Image } from 'react-native';
+import {ScrollView ,View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from 'react-native-elements'
-import {Header,Left,Right} from 'native-base'
+// import { Icon } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome'
+// import {Header,Left,Right} from 'native-base'
 
 import Produtos from '../../component/Produtos'
 
@@ -11,43 +12,31 @@ export default function Home(props) {
    const navigation = useNavigation();
 
     return (  
-    <View style={styles.container}>          
-        <View style={styles.header}> 
-        <Header style={{ backgroundColor:'#8b008b'}} >
-          <Left>               
-            <Icon 
-            name='menu'
-            color='#FFF'
-            size={35} 
-            onPress={() =>
-              props.navigation.openDrawer()} />  
-          </Left>   
-          <Text style={styles.tituloapp}>Clicou Checgou</Text>           
-          </Header>           
-          {/* <View style={styles.titulo}> 
-            <Text style={styles.texttitulo}>
-                Clicou Chegou
-            </Text>            
-          </View>  */}
-          
-          {/* <Image
-           source={require('../../assets/clicouchegou.jpg')}
-           style={styles.image}
-          /> */}
+    <View  style={styles.container}>             
+        <View style={styles.cabecalho}>                        
+              <View style={styles.iconBar}>
+                <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
+                    <Icon name='bars' size={27} color='#FFF' />
+                </TouchableOpacity>
+              </View> 
+              <Text style={styles.tituloapp}>
+                Clicou Chegou                 
+              </Text>                         
+        </View>       
+        
  
           <View style={styles.textContainer}>            
              <Text style={styles.text}>Produtos</Text> 
              <View style={styles.carrinho}>
               <Icon 
-                name='cart'
-                type='evilicon'
-                color='#8b008b'
+                name='shopping-cart'
+                color='#663399'
                 size={40}                
               /> 
              </View>   
           </View>
           
-        </View>
+
  
        <View style={styles.line} />
  
@@ -89,7 +78,7 @@ export default function Home(props) {
 
 const styles = StyleSheet.create({
     container:{
-      flex:1,
+      // flex:1,
       width: '100%',
       backgroundColor: '#fff'
     },
@@ -110,23 +99,24 @@ const styles = StyleSheet.create({
       fontFamily: 'Anton_400Regular',
       fontSize: 26,
       marginHorizontal: '1%',
-      color : '#8b008b',         
+      color : '#663399',         
     },
     line:{
-      borderBottomColor: '#8b008b',
-      borderBottomWidth: 2,
+      borderBottomColor: '#663399',
+       borderBottomWidth: 2,
       marginBottom : 1,   
     },
     carrinho:{
       flexDirection: 'row',
       left : '55%',   
       top: 3,      
+      justifyContent: 'flex-end', 
     },
     titulo:{  
        marginTop: '0%',  
        width: '110%', 
       height: 110,
-      backgroundColor:'#8b008b',  
+      backgroundColor:'#663399',  
     },
     texttitulo:{
       fontFamily: 'Anton_400Regular',
@@ -142,8 +132,27 @@ const styles = StyleSheet.create({
       fontSize: 26,     
       color : '#fff',
       textAlign: 'center', 
-      marginHorizontal: '25%',
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      marginHorizontal: '50%',
       marginEnd: '5%',
-      marginTop: '3%'        
+      marginTop: '15%'      
     },
+    Header: {
+      fontSize: 28,
+       color: '#fff',
+      textAlign: 'center', 
+      textAlignVertical: 'center',
+      marginTop: '3%',
+   },
+   iconBar: {        
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginLeft: '3%',
+    top: '13%',
+   },
+   cabecalho: {
+     height: 150,
+    backgroundColor: '#663399', //'#ffd700',
+}
   });
