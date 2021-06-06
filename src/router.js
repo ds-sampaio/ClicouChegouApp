@@ -13,6 +13,7 @@ import Configuracoes from './pages/Configuracoes';
 import AppList from './pages/Users/AppList';
 import AppForm from './pages/Users/AppForm';
 import AppFormInicial from './pages/Users/AppFormInicial';
+import ConfiguracoesCad from './pages/ConfiguracoesCad';
 
 
 
@@ -47,29 +48,48 @@ const Drawer = createDrawerNavigator();
     );
   }
 
+  function FormConfiguracoes(props) {
+    return (
+      <Stack.Navigator screenOptions={screenOptions}>
+           <Stack.Screen 
+                name="Configuracoes" 
+                component={Configuracoes} 
+                options= {({ navigation }) => {
+                    return {
+                        title: "Configuracões",
+                        headerRight: () => (
+                            <Button 
+                                onPress={() => navigation.navigate("ConfiguracoesCad")}
+                                type= "clear"
+                                icon={<Icon name="add" size={25} color="white" />}
+                            />
+                    )
+                }
+            }            
+            }
+          />   
+         <Stack.Screen name="ConfiguracoesCad" component={ConfiguracoesCad} options={{ headerShown: false }} />         
+      </Stack.Navigator>
+    );
+  }
+
+
 function Routes(props){
 
     return(   
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Home" >                            
+            <Drawer.Navigator getData >                            
                 <Drawer.Screen name="Home" component={Home} 
                     options= {{
                         title: "Página Inicial"
                     }}
                 /> 
-                {/* <Drawer.Screen 
-                name="FormUsers" 
-                component={FormUsers} 
-                options= {{
-                    title: "Usuários"
-                }}
-                />  */}
                  <Drawer.Screen name="Detail" component={Detail} 
                     options= {{
                         title: "Detail"
                     }}
-                />
-                <Drawer.Screen name="Configuracoes" component={Configuracoes} /> 
+                 />
+                <Drawer.Screen name="Configuracoes" component={FormConfiguracoes} /> 
                 <Drawer.Screen name="AppFormInicial" component={AppFormInicial} 
                     options= {{
                         title: "Usuario Login"
@@ -93,14 +113,24 @@ function Routes(props){
 
 const screenOptions = {
     headerStyle: {
-        backgroundColor: '#8b008b'
+        backgroundColor: '#663399'
     },
-    headerTintColor: '#fff',
+    headerTintColor: '#FFF',
     headerTitleStyle:{
         fontWeight: 'bold'
     }
 
 }
+
+const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user')
+      console.warn(jsonValue)
+      return jsonValue != null ? initialRouteName="Home" : initialRouteName="AppFormInicial";
+    } catch(e) {
+      // error reading value
+    }
+  }
 
 
 export default Routes

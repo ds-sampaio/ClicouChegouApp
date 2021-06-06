@@ -39,9 +39,9 @@ export default function Home(props) {
 
  
        <View style={styles.line} />
- 
+       {/* , justifyContent: 'space-aroud' */}
        <ScrollView>
-           <View style={{ flexDirection: 'row', justifyContent: 'space-aroud' }}>
+           <View style={{ flexDirection: 'row' }}>
             <Produtos img={require('../../assets/1.png')} cost="R$75,90" onClick={() => navigation.navigate('Detail')}> 
                 Gás
             </Produtos>
@@ -50,7 +50,7 @@ export default function Home(props) {
             </Produtos> 
            </View>   
 
-           <View style={{ flexDirection: 'row', justifyContent: 'space-aroud' }}>
+           <View style={{ flexDirection: 'row' }}>
             <Produtos img={require('../../assets/3.png')} cost="R$11,90" onClick={() => alert('Álcool adionado no carrinho')}>  
                 Álcool em Gel
             </Produtos>
@@ -59,7 +59,7 @@ export default function Home(props) {
             </Produtos> 
            </View>   
 
-           <View style={{ flexDirection: 'row', justifyContent: 'space-aroud' }}>
+           <View style={{ flexDirection: 'row' }}>
             <Produtos img={require('../../assets/5.png')} cost="R$100,90" onClick={() => alert('Cesta Básica adionado no carrinho')}> 
                 Cesta Básica
             </Produtos>
