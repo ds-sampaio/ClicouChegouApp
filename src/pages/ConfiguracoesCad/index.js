@@ -6,31 +6,48 @@ import axios from 'axios'
 import { server, showError, showSuccess} from '../common'
 import { ListItem, Button, Avatar } from 'react-native-elements'
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default props => {
 
+export default ({route, navigation}) => {
+    const [config = setConfig] = useState(route.params ? route.params : {})
     const initialUserState = {
         id_produto: null,
         id_loja: null,
         descricao: '',
-        quantidade: 0,
+        quantidade: '',
        } 
+        
     
     const [produtos, setprodutos] = useState([]); 
     const [produto, setproduto] = useState(initialUserState);
     const [prods, setprods] = useState([]);  
+    const [quantidade, setquantidade] = useState(''); 
+    const [user, setUser] = useState({}); 
 
-    useEffect(() => {
+    useEffect(() => {        
         loadConfiguracoes();
       }, []);
+
+     //pega o id usuario do asyncstorage
+        const getData = async () => {
+            try {
+            const jsonValue = await AsyncStorage.getItem('user') 
+            const usuarios = JSON.parse(jsonValue) 
+            return jsonValue != null ? JSON.parse(jsonValue) : initialUserStateU;            
+            } catch(e) {
+            // error reading value
+            }
+        }  
 
      //puxa os dados do backend referente ao usuario logado
     const loadConfiguracoes = async () => {
         try { 
         const res = await axios.get(`${server}/listproducts`)      
         setprodutos(res.data)
-        setprods(res.data)
+        setprods(res.data)  
         // console.warn(res.data)
+        getData().then(user => setUser(user));
         } catch(e) {
             showError(e)
         }
@@ -44,25 +61,52 @@ export default props => {
             ),
         });
     }
+    const setEnvio = async (produto) => {
+        try {           
+            if (user.id_usuario === null){
+              Alert.alert('ops,desculpe. Usuário não identificado')
+            } else {         
+              try {
+                // console.warn(user)
+                await axios.post(`${server}/configuracao`,{
+                    id_produtos: produto.id_produtos, 
+                    id_usuario: user.id_usuario,
+                    id_loja: produto.id_loja,
+                    quantidade: quantidade.quantidade
+
+               })
+                
+                showSuccess('Configiração Cadastrada')
+                navigation.goBack()
+              } catch(e){
+                  showError(e)
+              } 
+            }
+          } catch(e) {
+            // error reading value
+          }
+    }
+  
 
     
     
     function getConfiguracoesItem({ item : produto}) { 
+    //    console.warn(config.id_config)  navigation.goBack()
         return (   
-            <TouchableOpacity>
-                <View>
+            <TouchableOpacity onPress={() => setEnvio(produto)}>
+                {/* <View>
                 {
-                prods.map((produto, id_produtos) => (
+                prods.map((produto, id_produtos) => ( */}
                     <ListItem key={produto.id_produtos} bottomDivider>
-                    <Avatar source={{uri: produto.imagem}} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{color: '#000'}}>{produto.descricao}</ListItem.Title>
-                        <ListItem.Subtitle style={{color: '#000'}}>{produto.preco}</ListItem.Subtitle>
-                    </ListItem.Content>
+                        <Avatar source={{uri: produto.imagem}} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{color: '#000'}}>{produto.descricao}</ListItem.Title>
+                            <ListItem.Subtitle style={{color: '#000'}}>{produto.preco}</ListItem.Subtitle>
+                        </ListItem.Content>
                     </ListItem>
-               ))
+               {/* ))
                  }
-            </View>    
+            </View>     */}
             </TouchableOpacity>                  
         )
       }
@@ -88,10 +132,10 @@ export default props => {
             <View>
                 <TextInput  
                     style={styles.quantidade}
-                    onChangeText={quantidade => setproduto({...produto, quantidade})}                
+                    onChangeText={quantidade => setquantidade({...quantidade, quantidade})}                
                     placeholder="Informe a quantidade máxima..." 
                     clearButtonMode="always"
-                    value={produto.quantidade}
+                    value={quantidade.quantidade}
                 />    
             </View>       
             <FlatList

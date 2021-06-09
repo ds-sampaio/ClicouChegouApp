@@ -1,14 +1,65 @@
-import React from 'react';
-import {ScrollView ,View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {ScrollView ,View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 // import { Icon } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
-// import {Header,Left,Right} from 'native-base'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'   
+import { server, showError, showSuccess} from '../common'
 
 import Produtos from '../../component/Produtos'
 
 
 export default function Home(props) {
+  const initialUserState = {
+    id_usuario: null,
+    nome: "",   
+    cpf: "" , 
+    nome_cuidador: "",
+    tel_cuidador: "",
+    cpf_cuidador: "",
+    email_cuidador: "",
+    logradouro: "",
+    bairro: "",
+    numero: "",
+    forma_pagamento: "",
+    cidade: "",
+   } 
+
+  const [user, setUser] = useState(initialUserState);  
+  const [configuracoes, setConfiguracao] = useState([]); 
+
+  useEffect(() => {
+    getData().then(user => setUser(user));
+    //esta linha abaixo faz com que a lista seja atualizada após cadastro no componente Config
+    props.navigation.addListener('focus', ()=> getData().then(user => setUser(user)))
+  }, []);
+
+  //pega o id usuario do asyncstorage
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user') 
+      const usuarios = JSON.parse(jsonValue)
+      // console.warn(usuarios)
+      loadConfiguracoes(usuarios.id_usuario)
+      return jsonValue != null ? JSON.parse(jsonValue) : initialUserState;            
+    } catch(e) {
+      // error reading value
+    }
+  } 
+  //puxa os dados do backend referente ao usuario logado
+  const loadConfiguracoes = async usuarioid => {
+    try {
+      // console.warn(usuarioid)   
+      const res = await axios.get(`${server}/homeusu/${usuarioid}`)      
+      setConfiguracao(res.data)
+      // console.warn(res.data)
+    } catch(e) {
+        // showError(e)
+        setConfiguracao({})
+    }
+   }
+   
    const navigation = useNavigation();
 
     return (  
@@ -39,8 +90,15 @@ export default function Home(props) {
 
  
        <View style={styles.line} />
+        <FlatList data={configuracoes}
+          keyExtractor={item => `${item.id_config}`}
+          numColumns={2}
+          // numberOfLines={2}
+          renderItem={({item}) => <Produtos {...item}  /> } 
+        />  
+
        {/* , justifyContent: 'space-aroud' */}
-       <ScrollView>
+       {/* <ScrollView>
            <View style={{ flexDirection: 'row' }}>
             <Produtos img={require('../../assets/1.png')} cost="R$75,90" onClick={() => navigation.navigate('Detail')}> 
                 Gás
@@ -68,7 +126,7 @@ export default function Home(props) {
             </Produtos> 
            </View>    
 
-       </ScrollView>
+       </ScrollView> */}
  
     </View>
    );

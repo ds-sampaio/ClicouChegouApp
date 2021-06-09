@@ -14,6 +14,8 @@ import AppList from './pages/Users/AppList';
 import AppForm from './pages/Users/AppForm';
 import AppFormInicial from './pages/Users/AppFormInicial';
 import ConfiguracoesCad from './pages/ConfiguracoesCad';
+import { ConfigProvider } from './context/ConfigContext'
+
 
 
 
@@ -62,8 +64,17 @@ const Drawer = createDrawerNavigator();
                                 onPress={() => navigation.navigate("ConfiguracoesCad")}
                                 type= "clear"
                                 icon={<Icon name="add" size={25} color="white" />}
+                                
                             />
-                    )
+                        ),
+                        headerLeft: () => (
+                            <Button 
+                              onPress={() => navigation.goBack(null)} 
+                              type= "clear"
+                              icon={<Icon name='chevron-left' size={35} color='white' />}
+                            />
+                        ),
+                    
                 }
             }            
             }
@@ -77,7 +88,8 @@ const Drawer = createDrawerNavigator();
 function Routes(props){
 
     return(   
-        <NavigationContainer>
+       <ConfigProvider>
+            <NavigationContainer>
             <Drawer.Navigator getData >                            
                 <Drawer.Screen name="Home" component={Home} 
                     options= {{
@@ -108,6 +120,7 @@ function Routes(props){
                 />
             </Stack.Navigator>              */}
         </NavigationContainer>
+       </ConfigProvider>      
     )
 }
 

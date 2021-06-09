@@ -41,7 +41,7 @@ export default function AppForm({ route, navigation }) {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('user') 
-      console.warn(jsonValue)
+      // console.warn(jsonValue)
       return jsonValue != null ? JSON.parse(jsonValue) : initialUserState;            
     } catch(e) {
       // error reading value
@@ -93,7 +93,25 @@ export default function AppForm({ route, navigation }) {
       try {
         const jsonValue = await AsyncStorage.getItem('user')
         if (jsonValue != null){
-          console.warn('Update')
+          try {
+            // console.warn(user)
+            await axios.put(`${server}/usuario/${user.cpf}`,{
+              nome: user.nome,  
+              nome_cuidador: user.nome_cuidador,
+              tel_cuidador: user.tel_cuidador,
+              cpf_cuidador: user.cpf_cuidador,
+              email_cuidador:user.email_cuidador,
+              logradouro: user.logradouro,
+              bairro: user.bairro,
+              numero: user.numero,    
+           })
+            
+            showSuccess('Alteração efetuada')
+            loadUsuario()
+            navigation.goBack()
+          } catch(e){
+              showError(e)
+          } 
         } else {         
           try {
             // console.warn(user)
@@ -136,6 +154,7 @@ export default function AppForm({ route, navigation }) {
         </View> 
         <View style={styles.container}>                       
           <View style={styles.inputContainer}>                     
+              <Text style={styles.text}>Nome</Text>
               <TextInput 
                   style={styles.input} 
                   onChangeText={nome => setUser({...user, nome})}                
@@ -143,6 +162,7 @@ export default function AppForm({ route, navigation }) {
                   clearButtonMode="always" 
                   value={user.nome}
               /> 
+              <Text style={styles.text}>CPF</Text>
               <TextInput 
                   style={styles.input} 
                   onChangeText={cpf => setUser({...user, cpf})}                
@@ -150,34 +170,7 @@ export default function AppForm({ route, navigation }) {
                   clearButtonMode="always" 
                   value={user.cpf}
               /> 
-              <TextInput 
-                  style={styles.input} 
-                  onChangeText={nome_cuidador => setUser({...user, nome_cuidador})}                
-                  placeholder="Cuidador"
-                  clearButtonMode="always" 
-                  value={user.nome_cuidador}
-              /> 
-              <TextInput 
-                  style={styles.input} 
-                  onChangeText={email_cuidador => setUser({...user, email_cuidador})}                
-                  placeholder="E-mail"
-                  clearButtonMode="always" 
-                  value={user.email_cuidador}
-              />
-              <TextInput 
-                  style={styles.input} 
-                  onChangeText={tel_cuidador => setUser({...user, tel_cuidador})}                
-                  placeholder="Telefone"
-                  clearButtonMode="always" 
-                  value={user.tel_cuidador}
-              />
-              <TextInput 
-                  style={styles.input} 
-                  onChangeText={cpf_cuidador => setUser({...user, cpf_cuidador})}                
-                  placeholder="Cpf do cuidador"
-                  clearButtonMode="always" 
-                  value={user.cpf_cuidador}
-              /> 
+              <Text style={styles.text}>Logradouro</Text>
               <TextInput 
                   style={styles.input} 
                   onChangeText={logradouro => setUser({...user, logradouro})}                
@@ -185,6 +178,7 @@ export default function AppForm({ route, navigation }) {
                   clearButtonMode="always" 
                   value={user.logradouro}
               /> 
+              <Text style={styles.text}>Bairro</Text>
               <TextInput 
                   style={styles.input} 
                   onChangeText={bairro => setUser({...user, bairro})}                
@@ -192,13 +186,49 @@ export default function AppForm({ route, navigation }) {
                   clearButtonMode="always" 
                   value={user.bairro}
               /> 
+              <Text style={styles.text}>Nuemero</Text>
               <TextInput 
                   style={styles.input} 
                   onChangeText={numero => setUser({...user, numero})}                
                   placeholder="Numero"
                   clearButtonMode="always" 
                   value={user.numero}
-              />                        
+              />  
+              <Text></Text> 
+              <Text style={styles.cuidador}>Informações do Cuidador</Text>
+              <Text style={styles.text}>Nome</Text>
+              <TextInput 
+                  style={styles.input} 
+                  onChangeText={nome_cuidador => setUser({...user, nome_cuidador})}                
+                  placeholder="Cuidador"
+                  clearButtonMode="always" 
+                  value={user.nome_cuidador}
+              /> 
+              <Text style={styles.text}>E-Mail</Text>
+              <TextInput 
+                  style={styles.input} 
+                  onChangeText={email_cuidador => setUser({...user, email_cuidador})}                
+                  placeholder="E-mail"
+                  clearButtonMode="always" 
+                  value={user.email_cuidador}
+              />
+              <Text style={styles.text}>Telefone</Text>
+              <TextInput 
+                  style={styles.input} 
+                  onChangeText={tel_cuidador => setUser({...user, tel_cuidador})}                
+                  placeholder="Telefone"
+                  clearButtonMode="always" 
+                  value={user.tel_cuidador}
+              />
+              <Text style={styles.text}>CPF</Text>
+              <TextInput 
+                  style={styles.input} 
+                  onChangeText={cpf_cuidador => setUser({...user, cpf_cuidador})}                
+                  placeholder="Cpf do cuidador"
+                  clearButtonMode="always" 
+                  value={user.cpf_cuidador}
+              /> 
+                                   
               {/* <TouchableOpacity style={styles.button} onPress={handleButtonPress}> 
               <Text style={styles.buttonText}>Salvar</Text> 
               </TouchableOpacity>      */}
@@ -211,14 +241,14 @@ export default function AppForm({ route, navigation }) {
               <TouchableOpacity
                 onPress={() => SalvarDados()}
                 style={styles.button}>
-                <Text style={styles.buttonText}>SALVAR VALOR</Text>
+                <Text style={styles.buttonText}>SALVAR DADOS</Text>
               </TouchableOpacity>              
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={getData}
                 style={styles.button}>
                 <Text style={styles.buttonText}>LER VALOR</Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>  */}
           
               
           </View>
@@ -253,8 +283,8 @@ export default function AppForm({ route, navigation }) {
       marginBottom: 55,
     },
     input: {
-      marginTop: 10,
-      height: 60,
+      marginTop: 5,
+      height: 45,
       backgroundColor: '#fff',
       borderRadius: 10,
       paddingHorizontal: 24,
@@ -289,7 +319,7 @@ export default function AppForm({ route, navigation }) {
       justifyContent: 'center',
       elevation: 20,
       shadowOpacity: 20,
-      shadowColor: '#ff0000',
+      // shadowColor: '#ff0000',
     },
     buttonText: {
       color: '#fff',
@@ -307,5 +337,16 @@ export default function AppForm({ route, navigation }) {
       top: '10%',
       backgroundColor: '#663399',
       marginLeft: '15%',
+   },
+   text: {
+    color: '#663399',
+    marginTop: 1,
+    marginLeft: 10,
+  },
+  cuidador: {
+    color: '#663399',
+    marginTop: 5,
+    marginLeft: 10,
+    fontSize: 12,
    },
   });

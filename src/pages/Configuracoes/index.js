@@ -1,12 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { View,Text, StyleSheet, FlatList ,TouchableOpacity, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'   
 import { server, showError, showSuccess} from '../common'
-import { ListItem, Button, Icon, Avatar } from 'react-native-elements'
+import { ListItem, Button, Avatar, Icon } from 'react-native-elements'
+import ConfigContext from '../../context/ConfigContext' 
 
 export default props => {
-  
+  //tentativa de usar context api, mas n funcionou
+  // const { state } = useContext(ConfigContext)
+  // console.warn(state.id_config)
   const initialUserState = {
     id_usuario: null,
     nome: "",   
@@ -32,10 +35,12 @@ export default props => {
       cod_barras: "" 
    } 
   const [user, setUser] = useState(initialUserState);  
-  const [configuracoes, setConfig] = useState([]); 
+  const [configuracoes, setConfiguracao] = useState([]); 
 
   useEffect(() => {
     getData().then(user => setUser(user));
+    //esta linha abaixo faz com que a lista seja atualizada após cadastro no componente Config
+    props.navigation.addListener('focus', ()=> getData().then(user => setUser(user)))
   }, []);
 
   //pega o id usuario do asyncstorage
@@ -43,6 +48,7 @@ export default props => {
     try {
       const jsonValue = await AsyncStorage.getItem('user') 
       const usuarios = JSON.parse(jsonValue)
+      // console.warn(usuarios)
       loadConfiguracoes(usuarios.id_usuario)
       return jsonValue != null ? JSON.parse(jsonValue) : initialUserState;            
     } catch(e) {
@@ -54,28 +60,49 @@ export default props => {
     try {
       // console.warn(usuarioid)   
       const res = await axios.get(`${server}/homeusu/${usuarioid}`)      
-      setConfig(res.data)
+      setConfiguracao(res.data)
       // console.warn(res.data)
     } catch(e) {
-        showError(e)
+        // showError(e)
+        setConfiguracao({})
     }
    }
+   
+   
+    
+    function getActions(configuracao) {
+      return (
+          <>
+              <Button
+                    onPress={() => props.navigation.navigate('ConfiguracoesCad',configuracao)}
+                    type="clear"
+                    icon={<Icon name="edit" size={25} color="orange" />}
+                />
+              {/* <Button
+                  onPress={() => dispatch({type: 'deleteMedico', payload: medico})}
+                  type="clear"
+                  icon={<Icon name="delete" size={25} color="#FFF" />}
+              /> */}
+          </>
+      )
+  }
 
    function getConfiguracoesItem({ item : configuracao}) {  
      return (      
-	    <TouchableOpacity style={[styles.Lista, {backgroundColor: '#F8F8F8'}]} key={configuracao.id_config} bottomDivider
-        onPress={() => props.navigation.navigate('ConfiguracoesCad')} >
+	    <TouchableOpacity style={[styles.Lista, {backgroundColor: '#F8F8F8'}]} key={configuracao.id_config} bottomDivider 
+            onPress={() => props.navigation.navigate('ConfiguracoesCad',configuracao)} >  
          <Avatar  style={styles.imageIcon} tittle={configuracao.descricao} rounded source={{ uri: configuracao.imagem }}/> 
          <ListItem.Content>
             <ListItem.Title style={{color: '#000'}}>{configuracao.descricao}</ListItem.Title>
-            <ListItem.Subtitle style={{color: '#000'}}>{configuracao.preco}</ListItem.Subtitle>
-         </ListItem.Content>          
+            <ListItem.Subtitle style={{color: '#000'}}>{configuracao.preco}</ListItem.Subtitle>  
+         </ListItem.Content>  
+         <ListItem.Chevron/> 
       </TouchableOpacity>         
      )
    }
 
- return (
-   <View style={styles.container}>      
+ return (   
+   <View style={styles.container}>                
        <FlatList
             keyExtractor={configuracao => configuracao.id_config.toString()}
             data={configuracoes}
@@ -110,5 +137,14 @@ Lista: {
   alignItems: 'center',
   flexDirection: 'row',
   alignContent: 'center',
+},
+iconBar: {       
+  top: '10%',
+  backgroundColor: '#663399',
+},
+cabecalho: {
+ backgroundColor: '#663399',
+ width: '100%',
+//  flexDirection:'row',
 },
 })
