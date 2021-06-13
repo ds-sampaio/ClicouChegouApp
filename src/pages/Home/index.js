@@ -8,6 +8,7 @@ import axios from 'axios'
 import { server, showError, showSuccess} from '../common'
 
 import Produtos from '../../component/Produtos'
+import pedidoatualizado from '../Users/pedidoatualizado'
 
 
 export default function Home(props) {
@@ -56,23 +57,37 @@ export default function Home(props) {
       // console.warn(res.data)
     } catch(e) {
         // showError(e)
-        setConfiguracao({})
+        setConfiguracao({}) 
     }
+   }
+
+
+   const ConfirmaPedido = async (usuarioid) => {
+    try {
+       await axios.put(`${server}/confirmapedido/${usuarioid}`,{            
+        confirmacao: true 
+   })                
+     } catch(e){
+         showError(e)
+     } 
    }
    
    const navigation = useNavigation();
 
     return (  
     <View  style={styles.container}>             
-        <View style={styles.cabecalho}>                        
+        <View style={styles.cabecalho}>                                      
               <View style={styles.iconBar}>
                 <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
                     <Icon name='bars' size={27} color='#FFF' />
-                </TouchableOpacity>
-              </View> 
-              <Text style={styles.tituloapp}>
-                Clicou Chegou                 
-              </Text>                         
+                </TouchableOpacity>                  
+                <Text style={styles.tituloapp}>
+                  <TouchableOpacity style={styles.atualiza} onPress={() => props.navigation.navigate('pedidoatualizado')}>
+                        <Icon name='eye' size={35} color='#FFF' />
+                  </TouchableOpacity>  
+                  Clicou Chegou                 
+                </Text>  
+              </View>                                 
         </View>       
         
  
@@ -84,51 +99,28 @@ export default function Home(props) {
                 color='#663399'
                 size={40}                
               /> 
-             </View>   
+             </View>               
           </View>
           
 
  
        <View style={styles.line} />
-        <FlatList data={configuracoes}
-          keyExtractor={item => `${item.id_config}`}
-          numColumns={2}
-          // numberOfLines={2}
-          renderItem={({item}) => <Produtos {...item}  /> } 
-        />  
-
-       {/* , justifyContent: 'space-aroud' */}
-       {/* <ScrollView>
-           <View style={{ flexDirection: 'row' }}>
-            <Produtos img={require('../../assets/1.png')} cost="R$75,90" onClick={() => navigation.navigate('Detail')}> 
-                Gás
-            </Produtos>
-            <Produtos img={require('../../assets/2.png')} cost="R$5,00" onClick={() => navigation.navigate('Detail')}> 
-                Água
-            </Produtos> 
-           </View>   
-
-           <View style={{ flexDirection: 'row' }}>
-            <Produtos img={require('../../assets/3.png')} cost="R$11,90" onClick={() => alert('Álcool adionado no carrinho')}>  
-                Álcool em Gel
-            </Produtos>
-            <Produtos img={require('../../assets/4.png')} cost="R$2,00" onClick={() => alert('Máscara adionado no carrinho')}> 
-                Máscara descartavel
-            </Produtos> 
-           </View>   
-
-           <View style={{ flexDirection: 'row' }}>
-            <Produtos img={require('../../assets/5.png')} cost="R$100,90" onClick={() => alert('Cesta Básica adionado no carrinho')}> 
-                Cesta Básica
-            </Produtos>
-            <Produtos img={require('../../assets/6.png')} cost="R$15,00" onClick={() => alert('Sorvete adionado no carrinho')}> 
-                Sorvete Sabor Napolitano
-            </Produtos> 
-           </View>    
-
-       </ScrollView> */}
- 
-    </View>
+       <View style={styles.teste}>
+            <TouchableOpacity onPress={() => ConfirmaPedido(user.id_usuario)}>
+              <Text style={styles.textobotao}>Confirmar</Text> 
+            </TouchableOpacity>  
+      </View>  
+       <View>            
+          <View>
+             <FlatList data={configuracoes}
+              keyExtractor={item => `${item.id_config}`}
+              numColumns={2}
+              renderItem={({item}) => <Produtos {...item}  /> } 
+            />               
+          </View>                     
+       </View>                         
+    </View>    
+    
    );
    
 
@@ -180,7 +172,7 @@ const styles = StyleSheet.create({
       fontFamily: 'Anton_400Regular',
       fontSize: 26,     
       color : '#fff',
-      flexDirection: 'row',
+      // flexDirection: 'row',
       marginVertical: '13%',
       marginHorizontal: '30%',
       marginBottom: 13,           
@@ -189,12 +181,12 @@ const styles = StyleSheet.create({
       fontFamily: 'Anton_400Regular',
       fontSize: 26,     
       color : '#fff',
-      textAlign: 'center', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      marginHorizontal: '50%',
-      marginEnd: '5%',
-      marginTop: '15%'      
+      // textAlign: 'center', 
+      // alignItems: 'center', 
+      // justifyContent: 'center', 
+      // marginHorizontal: '50%',
+       marginEnd: '5%',
+       marginTop: '15%' ,     
     },
     Header: {
       fontSize: 28,
@@ -212,5 +204,27 @@ const styles = StyleSheet.create({
    cabecalho: {
      height: 150,
     backgroundColor: '#663399', //'#ffd700',
-}
+   },
+   teste: {
+     fontSize: 40,
+     backgroundColor: '#FFF', //f4a460
+     padding: 8,
+     alignItems: 'center',
+     color: '#000',
+     borderColor: '#663399',
+     borderRadius: 10, 
+   },
+   textobotao: {
+    // fontFamily: 'Anton_400Regular', 
+    fontSize: 40,    
+    alignItems: 'center',
+    color: '#663399',
+  },
+  atualiza:{    
+    color : '#fff', 
+   marginLeft: 70,
+    // marginEnd: '10%',
+  //  marginTop: '20%'      
+  },
+ 
   });

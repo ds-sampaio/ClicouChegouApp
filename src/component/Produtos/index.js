@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements'
+import axios from 'axios'   
+import { server, showError, showSuccess} from '../../pages/common'
 
 export default function Produtos(props) {
     function filterDesc(desc){
@@ -10,9 +12,24 @@ export default function Produtos(props) {
     
         return `$desc.substring(0, 23)...`;
      }
+
+     const handleButtonPress = async () => {
+     try {
+        await axios.post(`${server}/novopedido`,{            
+            id_loja: props.id_loja,
+            id_cliente: props.id_usuario,
+            id_produtos : props.id_produtos,
+            status : 'solicitado',   
+       })        
+      } catch(e){
+          showError(e)
+      } 
+    }
+
+
     return (
-       
-    <TouchableOpacity style={styles.container} onPress={props.onClick}>
+        // onPress={props.onClick}    
+    <TouchableOpacity style={styles.container} onPress={() => handleButtonPress()}>
          <Image 
             source={{
                 uri: props.imagem ,

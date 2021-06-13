@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function Detail() {
  return (
    <View style={styles.container}>
-       <Text> Pagina Detalhe do produto </Text>
+       <Text style={styles.font}> Em Construção... </Text>
    </View>
   );
 }
@@ -12,8 +12,12 @@ export default function Detail() {
 const styles = StyleSheet.create({
 container: {
   flex: 1,
-  backgroundColor: '#8b008b',
+  backgroundColor: '#663399',
  alignItems: 'center',
- justifyContent: 'center'
+ justifyContent: 'center',
+},
+font: {
+  color : '#FFF',
+  fontSize: 25,
 },
 })

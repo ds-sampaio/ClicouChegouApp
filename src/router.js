@@ -15,6 +15,7 @@ import AppForm from './pages/Users/AppForm';
 import AppFormInicial from './pages/Users/AppFormInicial';
 import ConfiguracoesCad from './pages/ConfiguracoesCad';
 import { ConfigProvider } from './context/ConfigContext'
+import pedidoatualizado from './pages/Users/pedidoatualizado';
 
 
 
@@ -46,6 +47,7 @@ const Drawer = createDrawerNavigator();
             }
           />   
          <Stack.Screen name="AppForm" component={AppForm} options={{ headerShown: false }} />         
+         <Stack.Screen name="pedidoatualizado" component={pedidoatualizado} options={{ headerShown: false }} />         
       </Stack.Navigator>
     );
   }
@@ -96,17 +98,23 @@ function Routes(props){
                         title: "Página Inicial"
                     }}
                 /> 
-                 <Drawer.Screen name="Detail" component={Detail} 
-                    options= {{
-                        title: "Detail"
-                    }}
-                 />
-                <Drawer.Screen name="Configuracoes" component={FormConfiguracoes} /> 
                 <Drawer.Screen name="AppFormInicial" component={AppFormInicial} 
                     options= {{
-                        title: "Usuario Login"
+                        title: "Usuário"
                     }}
-                />                                              
+                />  
+                <Drawer.Screen name="Configuracoes" component={FormConfiguracoes} /> 
+                <Drawer.Screen name="Detail" component={Detail} 
+                    options= {{
+                        title: "Compras"
+                    }}
+                 />
+                 <Drawer.Screen name="pedidoatualizado" component={pedidoatualizado} 
+                    options= {{
+                        title: "Atualizacão"
+                    }}
+                 /> 
+                                                                           
             </Drawer.Navigator>           
             {/* <Stack.Navigator>
                 <Stack.Screen
