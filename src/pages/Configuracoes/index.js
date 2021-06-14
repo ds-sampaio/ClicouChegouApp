@@ -1,10 +1,15 @@
 import React, {useContext, useState, useEffect} from 'react';
-import { View,Text, StyleSheet, FlatList ,TouchableOpacity, Image} from 'react-native';
+import { View,Text, StyleSheet, FlatList ,TouchableOpacity, Image, ScrollView, RefreshControl} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'   
 import { server, showError, showSuccess} from '../common'
 import { ListItem, Button, Avatar, Icon } from 'react-native-elements'
 import ConfigContext from '../../context/ConfigContext' 
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 
 export default props => {
   //tentativa de usar context api, mas n funcionou
@@ -36,6 +41,13 @@ export default props => {
    } 
   const [user, setUser] = useState(initialUserState);  
   const [configuracoes, setConfiguracao] = useState([]); 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {        
+    setRefreshing(true);
+    getData().then(user => setUser(user));
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     getData().then(user => setUser(user));
@@ -67,47 +79,69 @@ export default props => {
         setConfiguracao({})
     }
    }
+
+   const Delete = async (configuracao) => {
+    // console.warn(configuracao.id_config)
+    try {
+        await axios.delete(`${server}/configuracoes/${configuracao.id_config}`)
+    } catch(e) {
+        showError(e)
+    }
+   }
    
    
-    
+  //  dispatch({type: 'deleteMedico', payload: medico})
     function getActions(configuracao) {
       return (
           <>
-              <Button
+              {/* <Button
                     onPress={() => props.navigation.navigate('ConfiguracoesCad',configuracao)}
                     type="clear"
                     icon={<Icon name="edit" size={25} color="orange" />}
-                />
-              {/* <Button
-                  onPress={() => dispatch({type: 'deleteMedico', payload: medico})}
+                /> */}
+               <Button  
+                  onPress={() => Delete(configuracao)}
                   type="clear"
-                  icon={<Icon name="delete" size={25} color="#FFF" />}
-              /> */}
+                  icon={<Icon name="delete" size={40} color="#663399" />}
+              /> 
           </>
       )
   }
 
    function getConfiguracoesItem({ item : configuracao}) {  
-     return (      
-	    <TouchableOpacity style={[styles.Lista, {backgroundColor: '#F8F8F8'}]} key={configuracao.id_config} bottomDivider 
-            onPress={() => props.navigation.navigate('ConfiguracoesCad',configuracao)} >  
-         <Avatar  style={styles.imageIcon} tittle={configuracao.descricao} rounded source={{ uri: configuracao.imagem }}/> 
-         <ListItem.Content>
-            <ListItem.Title style={{color: '#000'}}>{configuracao.descricao}</ListItem.Title>
-            <ListItem.Subtitle style={{color: '#000'}}>{configuracao.preco}</ListItem.Subtitle>  
-         </ListItem.Content>  
-         <ListItem.Chevron/> 
-      </TouchableOpacity>         
+     return ( 
+     <View style={[styles.Lista, {backgroundColor: '#F8F8F8'}]} key={configuracao.id_config} bottomDivider>
+         <Avatar  style={styles.imageIcon} tittle={configuracao.descricao} rounded source={{ uri: configuracao.imagem }}/>         
+        <ListItem.Content>
+        <ListItem.Title style={{color: '#000'}}>{configuracao.descricao}</ListItem.Title>
+        <ListItem.Subtitle style={{color: '#000'}}>{configuracao.preco}</ListItem.Subtitle>  
+        </ListItem.Content>  
+        <ListItem.Chevron/>  
+        <View style={{flexDirection:'row'}}>{getActions(configuracao)}</View> 
+     </View>   
+     
+      
+	    // <TouchableOpacity style={[styles.Lista, {backgroundColor: '#F8F8F8'}]} key={configuracao.id_config} bottomDivider 
+      //       onPress={() => props.navigation.navigate('ConfiguracoesCad',configuracao)} >          
+      // </TouchableOpacity>         
      )
    }
 
  return (   
    <View style={styles.container}>                
+      <ScrollView
+               refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+       }>  
        <FlatList
             keyExtractor={configuracao => configuracao.id_config.toString()}
             data={configuracoes}
             renderItem={getConfiguracoesItem}
         />     
+      </ScrollView>  
    </View>
 
   )

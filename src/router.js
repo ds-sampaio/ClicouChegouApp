@@ -16,7 +16,27 @@ import AppFormInicial from './pages/Users/AppFormInicial';
 import ConfiguracoesCad from './pages/ConfiguracoesCad';
 import { ConfigProvider } from './context/ConfigContext'
 import pedidoatualizado from './pages/Users/pedidoatualizado';
+import historico from './pages/Users/historico';
 
+
+import Menu from './pages/screens/Menu'
+
+const menuConfig = {
+    initialRoutName: 'Home',
+    contentComponent: Menu,
+    contentOptions: {
+        labelStyle: {
+            fontWeight: 'normal',
+            fontsize: 20,
+            backgroundColor: '#FFF',
+        },
+        activeLabelStyle: {
+            color: '#080',
+            fontWeight: 'bold',
+
+        }
+    }
+}
 
 
 
@@ -47,7 +67,8 @@ const Drawer = createDrawerNavigator();
             }
           />   
          <Stack.Screen name="AppForm" component={AppForm} options={{ headerShown: false }} />         
-         <Stack.Screen name="pedidoatualizado" component={pedidoatualizado} options={{ headerShown: false }} />         
+         <Stack.Screen name="pedidoatualizado" component={pedidoatualizado} options={{ headerShown: false }} /> 
+         <Stack.Screen name="historico" component={historico} options={{ headerShown: false }} />        
       </Stack.Navigator>
     );
   }
@@ -92,7 +113,7 @@ function Routes(props){
     return(   
        <ConfigProvider>
             <NavigationContainer>
-            <Drawer.Navigator getData >                            
+            <Drawer.Navigator getData drawerContentOptions={menuConfig} drawerContent={(props) => <Menu {...props}/>}>                            
                 <Drawer.Screen name="Home" component={Home} 
                     options= {{
                         title: "Página Inicial"
@@ -104,14 +125,19 @@ function Routes(props){
                     }}
                 />  
                 <Drawer.Screen name="Configuracoes" component={FormConfiguracoes} /> 
-                <Drawer.Screen name="Detail" component={Detail} 
+                {/* <Drawer.Screen name="Detail" component={Detail} 
                     options= {{
                         title: "Compras"
+                    }}
+                 />                  */}
+                 <Drawer.Screen name="historico" component={historico} 
+                    options= {{
+                        title: "Histórico de Pedidos"
                     }}
                  />
                  <Drawer.Screen name="pedidoatualizado" component={pedidoatualizado} 
                     options= {{
-                        title: "Atualizacão"
+                        title: ""
                     }}
                  /> 
                                                                            

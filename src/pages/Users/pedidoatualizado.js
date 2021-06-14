@@ -55,7 +55,7 @@ export default function pedidoatualizado (props) {
       try {
         const res = await axios.get(`${server}/atualizacao/${usuarioid}`)   
         setAtualizacoes(res.data[0])
-        // console.warn(res.data)
+        // console.warn(res.data[0])
       } catch(e) {
         setAtualizacoes({}) 
       }
@@ -73,13 +73,17 @@ export default function pedidoatualizado (props) {
             }>    
             <View>             
                 <View style={styles.tela}>
-                <Text style={styles.titulo}>Ultimo pedido</Text>   
+                <Text style={styles.titulo}>Último pedido</Text>   
                 </View>             
                 <View style={styles.info}>
                     <View>
                         <View style={{flexDirection:'row'}}>
                             <Text style={styles.titulo}>Nº do Pedido: 000</Text>
                             <Text style={styles.titulo}>{atualizacoes.id_pedido}</Text>
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={styles.titulo}>Status: </Text>
+                            <Text style={styles.titulo}>{atualizacoes.status}</Text>
                         </View>
                         <View style={{flexDirection:'row'}}>
                             <Text style={styles.titulo}>Total: R$</Text>

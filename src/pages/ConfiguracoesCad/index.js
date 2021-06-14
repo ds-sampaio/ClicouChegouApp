@@ -55,11 +55,16 @@ export default ({route, navigation}) => {
 
 
     function setPesquisa(descricao){
-        setprods({
-            prods: produtos.filter(id_produtos =>
-            id_produtos.descricao.includes(descricao)
-            ),
-        });
+        if (descricao !== null){
+            setprods({
+                prods: produtos.filter(id_produtos =>
+                id_produtos.descricao.includes(descricao)
+                ),
+            });
+            // setprodutos(prods)            
+        }
+        
+        
     }
     const setEnvio = async (produto) => {
         try {           
