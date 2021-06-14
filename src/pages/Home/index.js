@@ -81,13 +81,13 @@ export default function Home(props) {
                 <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
                     <Icon name='bars' size={27} color='#FFF' />
                 </TouchableOpacity>                  
-                <Text style={styles.tituloapp}>
-                  <TouchableOpacity style={styles.atualiza} onPress={() => props.navigation.navigate('pedidoatualizado')}>
+                <TouchableOpacity style={styles.atualiza} onPress={() => props.navigation.navigate('pedidoatualizado')}>
                         <Icon name='eye' size={35} color='#FFF' />
-                  </TouchableOpacity>  
+              </TouchableOpacity> 
+                <Text style={styles.tituloapp}>                  
                   Clicou Chegou                 
-                </Text>  
-              </View>                                 
+                </Text>                  
+              </View>                                                
         </View>       
         
  
@@ -110,6 +110,7 @@ export default function Home(props) {
               <Text style={styles.textobotao}>Confirmar</Text> 
             </TouchableOpacity>  
       </View>  
+      <View style={styles.line} />
        <View>            
           <View>
              <FlatList data={configuracoes}
@@ -181,10 +182,10 @@ const styles = StyleSheet.create({
       fontFamily: 'Anton_400Regular',
       fontSize: 26,     
       color : '#fff',
-      // textAlign: 'center', 
-      // alignItems: 'center', 
-      // justifyContent: 'center', 
-      // marginHorizontal: '50%',
+      textAlign: 'center', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      marginHorizontal: '50%',
        marginEnd: '5%',
        marginTop: '15%' ,     
     },
@@ -215,16 +216,18 @@ const styles = StyleSheet.create({
      borderRadius: 10, 
    },
    textobotao: {
-    // fontFamily: 'Anton_400Regular', 
-    fontSize: 40,    
+    fontFamily: 'Anton_400Regular', 
+    fontSize: 30,    
     alignItems: 'center',
     color: '#663399',
+    borderRadius: 10, 
+    borderColor: '#663399',
   },
   atualiza:{    
     color : '#fff', 
-   marginLeft: 70,
+    marginLeft: -28,
     // marginEnd: '10%',
-  //  marginTop: '20%'      
+    marginTop: '15%'      
   },
  
   });
