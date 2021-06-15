@@ -5,7 +5,7 @@ import Configuracoes from '../Configuracoes';
 import axios from 'axios'   
 import { server, showError, showSuccess} from '../common'
 import { ListItem, Button, Avatar } from 'react-native-elements'
-import { Alert } from 'react-native';
+import { Alert , ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -44,9 +44,7 @@ export default ({route, navigation}) => {
     const loadConfiguracoes = async () => {
         try { 
         const res = await axios.get(`${server}/listproducts`)      
-        setprodutos(res.data)
-        setprods(res.data)  
-        // console.warn(res.data)
+        setprodutos(res.data)               
         getData().then(user => setUser(user));
         } catch(e) {
             showError(e)
@@ -58,13 +56,14 @@ export default ({route, navigation}) => {
         if (descricao !== null){
             setprods({
                 prods: produtos.filter(id_produtos =>
-                id_produtos.descricao.includes(descricao)
+                id_produtos?.descricao.includes(descricao)
                 ),
             });
-            // setprodutos(prods)            
+            console.warn(prods)
+            setprodutos(prods)            
+        } else {
+            setprodutos([]) 
         }
-        
-        
     }
     const setEnvio = async (produto) => {
         try {           
@@ -77,7 +76,7 @@ export default ({route, navigation}) => {
                     id_produtos: produto.id_produtos, 
                     id_usuario: user.id_usuario,
                     id_loja: produto.id_loja,
-                    quantidade: quantidade.quantidade
+                    quantidade: quantidade.quantidade ? quantidade.quantidade : 1
 
                })
                 
@@ -142,12 +141,15 @@ export default ({route, navigation}) => {
                     clearButtonMode="always"
                     value={quantidade.quantidade}
                 />    
-            </View>       
-            <FlatList
-                keyExtractor={produto => produto.id_produtos.toString()}
-                data={produtos}
-                renderItem={getConfiguracoesItem}
-            />     
+            </View>  
+            {/* <ScrollView> */}
+                <FlatList
+                    keyExtractor={produto => produto.id_produtos.toString()}
+                    data={produtos}
+                    renderItem={getConfiguracoesItem}
+                />   
+            {/* </ScrollView>      */}
+              
         </View>
         
     )
