@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements'
 import axios from 'axios'   
 import { server, showError, showSuccess} from '../../pages/common'
 
 export default function Produtos(props) {
+
+    const [quantidade, setQuantidade] = useState([]);  
+
     function filterDesc(desc){
         if(desc.length < 27){
             return desc;
@@ -13,22 +16,49 @@ export default function Produtos(props) {
         return `$desc.substring(0, 23)...`;
      }
 
-     const handleButtonPress = async () => {
-     try {
-        await axios.post(`${server}/novopedido`,{            
-            id_loja: props.id_loja,
-            id_cliente: props.id_usuario,
-            id_produtos : props.id_produtos,
-            status : 'solicitado',   
-       })        
-      } catch(e){
-          showError(e)
-      } 
+      
+     const handleSave = async () => {
+        try {
+            await axios.post(`${server}/novopedido`,{            
+                id_loja: props.id_loja,
+                id_cliente: props.id_usuario,
+                id_produtos : props.id_produtos,
+                status : 'solicitado',   
+        })        
+        } catch(e){
+            showError(e)
+        }             
+     }
+
+     const handleButtonPress = async () => {        
+        try {
+            const res =  await axios.post(`${server}/verificacao/${props.id_usuario}`,{  
+                id_produtos : props.id_produtos,
+            })  
+        //  if (!res.data[0]) {
+        //     // setQuantidade(res.data[0])
+        //  }   
+         
+         console.warn(JSON.stringify(res.data))
+         if (res.data[0] !== undefined) {
+            if (res.data[0].qtdpedido < res.data[0].quantidade  ) {
+                handleSave()
+            } else {
+                0
+            }
+
+         } else {
+            handleSave()  
+         }           
+        } catch(e){
+            showError(e)
+        } 
     }
 
 
     return (
         // onPress={props.onClick}    
+        
     <TouchableOpacity style={styles.container} onPress={() => handleButtonPress()}>
          <Image 
             source={{
@@ -58,6 +88,7 @@ export default function Produtos(props) {
 
 const styles = StyleSheet.create({
     container:{
+        flex: 1,
         paddingVertical: '2%',
         alignItems: 'center',
         justifyContent: 'center',

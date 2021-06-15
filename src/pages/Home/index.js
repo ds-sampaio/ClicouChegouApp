@@ -29,6 +29,8 @@ export default function Home(props) {
 
   const [user, setUser] = useState(initialUserState);  
   const [configuracoes, setConfiguracao] = useState([]); 
+  const [refreshing, setRefreshing] = useState(false);
+
 
   useEffect(() => {
     getData().then(user => setUser(user));
@@ -51,10 +53,10 @@ export default function Home(props) {
   //puxa os dados do backend referente ao usuario logado
   const loadConfiguracoes = async usuarioid => {
     try {
-      // console.warn(usuarioid)   
-      const res = await axios.get(`${server}/homeusu/${usuarioid}`)      
+       console.warn(usuarioid)   
+       const res = await axios.get(`${server}/homeusu/${usuarioid}`)           
       setConfiguracao(res.data)
-      // console.warn(res.data)
+    //  console.warn(res.data)
     } catch(e) {
         // showError(e)
         setConfiguracao({}) 
@@ -71,11 +73,19 @@ export default function Home(props) {
          showError(e)
      } 
    }
+
+   async function onRefresh() {
+    setRefreshing(true);
+    
+    await getData().then(user => setUser(user));
+
+    setRefreshing(false);
+  }
    
    const navigation = useNavigation();
-
+    
     return (  
-    <View  style={styles.container}>             
+      <View  style={styles.container}>             
         <View style={styles.cabecalho}>                                      
               <View style={styles.iconBar}>
                 <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
@@ -105,22 +115,24 @@ export default function Home(props) {
 
  
        <View style={styles.line} />
-       <View style={styles.teste}>
-            <TouchableOpacity onPress={() => ConfirmaPedido(user.id_usuario)}>
-              <Text style={styles.textobotao}>Confirmar</Text> 
-            </TouchableOpacity>  
-      </View>  
-      <View style={styles.line} />
-       <View>            
-          <View>
-             <FlatList data={configuracoes}
+       <View style={{flex:1}}>            
+          <View style={{flex:1}}>
+             <FlatList style={{flex:1}} data={configuracoes}
+              contentContainerStyle={{ flexGrow: 1, paddingBottom: 5 }}
               keyExtractor={item => `${item.id_config}`}
-              numColumns={2}
-              renderItem={({item}) => <Produtos {...item}  /> } 
+              numColumns={2}              
+              renderItem={({item}) => <Produtos {...item}  /> }
+              onRefresh={onRefresh}
+              refreshing={refreshing} 
+              onEndReachedThreshold={0.1}
             />               
-          </View>                     
-       </View>                         
+          </View>
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center',bottom:0 ,width: '100%', padding: 15 , backgroundColor:'#663399' ,position:'absolute', zIndex:10}} onPress={() => ConfirmaPedido(user.id_usuario)}>
+              <Text style={styles.textobotao}>Confirmar</Text> 
+          </TouchableOpacity>                         
+       </View>                          
     </View>    
+      
     
    );
    
@@ -129,8 +141,8 @@ export default function Home(props) {
 
 const styles = StyleSheet.create({
     container:{
-      // flex:1,
-      width: '100%',
+      flex:1,
+      // width: '100%',
       backgroundColor: '#fff'
     },
     header:{
@@ -219,7 +231,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Anton_400Regular', 
     fontSize: 30,    
     alignItems: 'center',
-    color: '#663399',
+    color: '#FFF',
     borderRadius: 10, 
     borderColor: '#663399',
   },

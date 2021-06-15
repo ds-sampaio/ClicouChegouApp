@@ -41,13 +41,22 @@ export default props => {
    } 
   const [user, setUser] = useState(initialUserState);  
   const [configuracoes, setConfiguracao] = useState([]); 
-  const [refreshing, setRefreshing] = React.useState(false);
+  // const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = React.useCallback(() => {        
+  // const onRefresh = React.useCallback(() => {        
+  //   setRefreshing(true);
+  //   getData().then(user => setUser(user));
+  //   wait(1000).then(() => setRefreshing(false));
+  // }, []);
+
+  async function onRefresh() {
     setRefreshing(true);
-    getData().then(user => setUser(user));
-    wait(1000).then(() => setRefreshing(false));
-  }, []);
+    
+    await getData().then(user => setUser(user));
+
+    setRefreshing(false);
+  }
 
   useEffect(() => {
     getData().then(user => setUser(user));
@@ -129,19 +138,21 @@ export default props => {
 
  return (   
    <View style={styles.container}>                
-      <ScrollView
+      {/* <ScrollView
                refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
                   onRefresh={onRefresh}
                 />
-       }>  
-       <FlatList
+       }>   */}
+       <FlatList 
             keyExtractor={configuracao => configuracao.id_config.toString()}
             data={configuracoes}
             renderItem={getConfiguracoesItem}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
         />     
-      </ScrollView>  
+      {/* </ScrollView>   */}
    </View>
 
   )
