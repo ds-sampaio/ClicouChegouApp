@@ -124,7 +124,11 @@ function Routes(props){
                         title: "Usuário"
                     }}
                 />  
-                <Drawer.Screen name="Configuracoes" component={FormConfiguracoes} /> 
+                <Drawer.Screen name="Configuracoes" component={FormConfiguracoes}
+                    options= {{
+                        title: "Configurações"
+                    }}                
+                /> 
                 {/* <Drawer.Screen name="Detail" component={Detail} 
                     options= {{
                         title: "Compras"
@@ -137,7 +141,7 @@ function Routes(props){
                  />
                  <Drawer.Screen name="pedidoatualizado" component={pedidoatualizado} 
                     options= {{
-                        title: ""
+                        title: "Pedido Atualizado"
                     }}
                  /> 
                                                                            
